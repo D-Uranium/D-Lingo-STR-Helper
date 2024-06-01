@@ -20,6 +20,10 @@ try {
 	).then((response) => response.json());
 
 	let xp = 0;
+
+	// Helper function to introduce a delay
+	const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 	for (let i = 0; i < process.env.LESSONS; i++) {
 		const session = await fetch(
 			"https://www.duolingo.com/2017-06-30/sessions",
@@ -97,13 +101,17 @@ try {
 			},
 		).then((response) => response.json());
 
+		// Simulate time taken for a practice session (90 seconds)
+		const startTime = +new Date() - 90000;
+		await delay(90000);
+
 		const response = await fetch(
 			`https://www.duolingo.com/2017-06-30/sessions/${session.id}`,
 			{
 				body: JSON.stringify({
 					...session,
 					heartsLeft: 0,
-					startTime: (+new Date() - 60000) / 1000,
+					startTime: startTime / 1000,
 					enableBonusPoints: false,
 					endTime: +new Date() / 1000,
 					failed: false,
@@ -116,6 +124,11 @@ try {
 		).then((response) => response.json());
 
 		xp += response.xpGain;
+
+		// Delay between practices (10 seconds)
+		if (i < process.env.LESSONS - 1) {
+			await delay(10000);
+		}
 	}
 
 	console.log(`🎉 You won ${xp} XP`);
