@@ -24,6 +24,9 @@ try {
 	// Helper function to introduce a delay
 	const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+	// Function to generate a random delay between min and max milliseconds
+	const randomDelay = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
 	for (let i = 0; i < process.env.LESSONS; i++) {
 		const session = await fetch(
 			"https://www.duolingo.com/2017-06-30/sessions",
@@ -101,9 +104,10 @@ try {
 			},
 		).then((response) => response.json());
 
-		// Simulate time taken for a practice session (90 seconds)
-		const startTime = +new Date() - 90000;
-		await delay(90000);
+		// Simulate time taken for a practice session (random between 81 and 126 seconds)
+		const practiceTime = randomDelay(81000, 126000);
+		const startTime = +new Date() - practiceTime;
+		await delay(practiceTime);
 
 		const response = await fetch(
 			`https://www.duolingo.com/2017-06-30/sessions/${session.id}`,
@@ -125,9 +129,10 @@ try {
 
 		xp += response.xpGain;
 
-		// Delay between practices (10 seconds)
+		// Delay between practices (random between 8 and 12 seconds)
 		if (i < process.env.LESSONS - 1) {
-			await delay(10000);
+			const breakTime = randomDelay(8000, 12000);
+			await delay(breakTime);
 		}
 	}
 
