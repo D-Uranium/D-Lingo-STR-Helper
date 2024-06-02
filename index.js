@@ -19,6 +19,16 @@ try {
 		},
 	).then((response) => response.json());
 
+	// Fetch available skills (units)
+	const skillsResponse = await fetch(
+		`https://www.duolingo.com/2017-06-30/users/${sub}/skills`,
+		{
+			headers,
+		},
+	).then((response) => response.json());
+
+	const skills = skillsResponse.skills;
+
 	let xp = 0;
 
 	// Helper function to introduce a delay
@@ -28,6 +38,9 @@ try {
 	const randomDelay = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 	for (let i = 0; i < process.env.LESSONS; i++) {
+		// Select a random skill
+		const randomSkill = skills[Math.floor(Math.random() * skills.length)];
+
 		const session = await fetch(
 			"https://www.duolingo.com/2017-06-30/sessions",
 			{
@@ -96,8 +109,9 @@ try {
 					isV2: true,
 					juicy: true,
 					learningLanguage,
+					skillId: randomSkill.id, // Specify the skill ID
 					smartTipsVersion: 2,
-					type: "GLOBAL_PRACTICE",
+					type: "PRACTICE",
 				}),
 				headers,
 				method: "POST",
