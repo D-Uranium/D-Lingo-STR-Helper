@@ -1,10 +1,8 @@
 name: TEST _ Keep my Duolingo streak # random times
 
-#on:
-  #schedule:
-    #- cron: '25 1 * * *' # Run at 2:25 AM UTC+1
-
 on:
+  schedule:
+    - cron: '25 1 * * *' # Run at 2:25 AM UTC+1
   workflow_dispatch:
 
 jobs:
@@ -24,8 +22,8 @@ jobs:
         run: |
           # Calculate a random number of seconds between 0 and 20,400 (5 hours 40 minutes)
           RANDOM_DELAY=$(( RANDOM % 20400 ))
-          echo "Random delay in seconds: $RANDOM_DELAY"
-          echo "::set-output name=delay::$RANDOM_DELAY"
+          echo "Random delay in seconds: $RANDOM_DELAY" > random_delay.txt
+          echo "delay=$RANDOM_DELAY" >> $GITHUB_ENV
 
       - name: Sleep for random delay
         run: |
