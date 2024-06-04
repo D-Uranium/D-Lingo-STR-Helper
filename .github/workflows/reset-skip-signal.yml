@@ -15,13 +15,13 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const { data: issues } = await github.issues.listForRepo({
+            const issues = await github.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
               labels: 'skip',
               state: 'open'
             });
-            for (const issue of issues) {
+            for (const issue of issues.data) {
               await github.issues.update({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
