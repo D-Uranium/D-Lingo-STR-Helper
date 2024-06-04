@@ -2,11 +2,11 @@ name: Keep my Duolingo streak # random times
 
 on:
   schedule:
-    - cron: '18 1 * * *' # Run at 2:18 AM UTC+1
+    - cron: '25 1 * * *' # Run at 2:25 AM UTC+1
 
 jobs:
   study:
-    runs-on: ubuntu-latest # GitHub Actions doesn't support Windows 11; ubuntu-latest is the closest option
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
