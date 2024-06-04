@@ -37,7 +37,7 @@ jobs:
         run: |
           DELAY="${{ env.delay }}"
           echo "DELAY value: $DELAY"
-          echo "Sleeping for $DELAY seconds"
+          echo "Sleeping for $((DELAY / 60)) minutes. ($DELAY seconds)"
           sleep "$DELAY"
 
       - name: Run the Duolingo script
