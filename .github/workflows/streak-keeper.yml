@@ -1,8 +1,15 @@
 name: Keep my Duolingo streak
 
 on:
-  schedule:
-    - cron: '0 22 * * *'
+  #schedule:
+    #- cron: '5 22 * * *' # at 10:05 PM (UTC)
+  workflow_dispatch:
+    inputs:
+      lessons:
+        default: 1
+        description: 'Number of lessons to be completed'
+        required: false
+        type: number
 
 jobs:
   study:
