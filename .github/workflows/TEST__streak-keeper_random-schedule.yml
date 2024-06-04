@@ -10,8 +10,6 @@ on:
         description: 'Number of lessons to be completed'
         required: false
         type: number
-
-
 jobs:
   study:
     runs-on: ubuntu-latest
@@ -33,10 +31,10 @@ jobs:
           echo "delay=$RANDOM_DELAY" >> $GITHUB_ENV
 
       - name: Sleep for random delay
-      run: |
-        DELAY="${{ steps.random_delay.outputs.delay }}"
-        echo "Sleeping for $DELAY seconds"
-        sleep "$DELAY"
+        run: |
+          DELAY="${{ steps.random_delay.outputs.delay }}"
+          echo "Sleeping for $DELAY seconds"
+          sleep "$DELAY"
 
 
       - name: Run the Duolingo script
