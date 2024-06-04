@@ -1,0 +1,12 @@
+name: Skip Today # skip today's practice
+
+on:
+  repository_dispatch:
+    types: [skip-practice]
+
+jobs:
+  skip_today:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Skip Today's Practice
+        run: echo "Received skip signal. Skipping today's practice."
