@@ -1,15 +1,31 @@
-name: Reset Skip Signal # resets the skip signal
+name: Reset Skip Signal
 
 on:
   schedule:
-    - cron: '0 11 * * *' # Run at midnight UTC
+    - cron: '0 0 * * *' # Runs daily at midnight UTC
   workflow_dispatch:
 
 jobs:
-  reset_signal:
+  reset_skip_signal:
     runs-on: ubuntu-latest
     steps:
-      - name: Reset Skip Signal
-        run: |
-          # Close any open skip issues
-          gh issue list -l skip --json number --state open --limit 100 | jq -r '.[] | .number' | xargs -I {} gh issue close {}
+      - name: Delete skip issue
+        id: delete_issue
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { data: issues } = await github.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'skip',
+              state: 'open'
+            });
+            for (const issue of issues) {
+              await github.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed'
+              });
+            }
