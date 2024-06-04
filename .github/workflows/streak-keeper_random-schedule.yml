@@ -35,9 +35,10 @@ jobs:
 
       - name: Sleep for random delay
         run: |
-          DELAY=${{ steps.random_delay.outputs.delay }}
+          DELAY="${{ steps.random_delay.outputs.delay }}"
           echo "Sleeping for $DELAY seconds"
-          sleep $DELAY
+          sleep "$DELAY"
+
 
       - name: Run the Duolingo script
         run: node index.js
