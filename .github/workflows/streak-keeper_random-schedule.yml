@@ -1,4 +1,4 @@
-name: Keep my Duolingo streak # random times
+name: Keep my Duolingo streak -- Cron + Manual Trigger # random times
 # This workflow runs at a random time between 6:00 PM and 11:40 PM (UTC/GMT).
 # If, for any reason, I haven't used the Duolingo app by 6:00 PM, the workflow will ensure
 # the streak continues by setting a random time between 6:00 PM and 11:00 PM (UTC/GMT).
@@ -35,10 +35,10 @@ jobs:
 
       - name: Sleep for random delay
         run: |
-          DELAY="${{ steps.random_delay.outputs.delay }}"
+          DELAY="${{ env.delay }}"
+          echo "DELAY value: $DELAY"
           echo "Sleeping for $DELAY seconds"
           sleep "$DELAY"
-
 
       - name: Run the Duolingo script
         run: node index.js
