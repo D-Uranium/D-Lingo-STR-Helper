@@ -6,6 +6,12 @@ on:
   schedule:
     - cron: '2 18 * * *'  # Runs at 7:02PM UTC+1
   workflow_dispatch:      # Triggered Manually from the Actions Page
+    inputs:
+      lessons:
+        default: 1
+        description: 'Number of lessons to be completed'
+        required: false
+        type: number
 
 jobs:
   study:
@@ -37,4 +43,5 @@ jobs:
         run: node index.js
         env:
           DUOLINGO_JWT: ${{ secrets.DUOLINGO_JWT }}
-          LESSONS: 1
+          #LESSONS: 1
+          LESSONS: ${{ inputs.lessons }}
