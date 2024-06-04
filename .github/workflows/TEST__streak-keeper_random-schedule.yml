@@ -4,6 +4,13 @@ on:
   schedule:
     - cron: '25 1 * * *' # Run at 2:25 AM UTC+1
   workflow_dispatch:
+    inputs:
+      lessons:
+        default: 1
+        description: 'Number of lessons to be completed'
+        required: false
+        type: number
+
 
 jobs:
   study:
@@ -35,4 +42,5 @@ jobs:
         run: node index.js
         env:
           DUOLINGO_JWT: ${{ secrets.DUOLINGO_JWT }}
-          LESSONS: 1
+          #LESSONS: 1
+          LESSONS: ${{ inputs.lessons }}
