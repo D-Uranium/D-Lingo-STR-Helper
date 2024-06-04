@@ -3,6 +3,7 @@ name: Skip Today # skip today's practice
 on:
   repository_dispatch:
     types: [skip-practice]
+  workflow_dispatch:
 
 jobs:
   skip_today:
