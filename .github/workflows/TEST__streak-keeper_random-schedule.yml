@@ -1,8 +1,11 @@
 name: TEST _ Keep my Duolingo streak # random times
 
+#on:
+  #schedule:
+    #- cron: '25 1 * * *' # Run at 2:25 AM UTC+1
+
 on:
-  schedule:
-    - cron: '25 1 * * *' # Run at 2:25 AM UTC+1
+  workflow_dispatch:
 
 jobs:
   study:
