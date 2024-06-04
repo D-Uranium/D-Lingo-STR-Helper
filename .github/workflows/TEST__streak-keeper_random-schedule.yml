@@ -1,4 +1,4 @@
-name: TEST _ Keep my Duolingo streak # random times
+name: TEST _ Keep my Duolingo streak # random times + checks for "skip today" signal
 
 on:
   schedule:
@@ -10,6 +10,7 @@ on:
         description: 'Number of lessons to be completed'
         required: false
         type: number
+
 jobs:
   study:
     runs-on: ubuntu-latest
@@ -22,25 +23,40 @@ jobs:
         with:
           node-version: 20
 
+      - name: Check for skip signal
+        id: check_skip_signal
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { octokit } = require("@octokit/rest");
+            const response = await octokit.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              creator: context.actor,
+              labels: 'skip'
+            });
+            return response.data.length > 0;
+
       - name: Calculate random delay
+        if: steps.check_skip_signal.outputs.result == 'false'
         id: random_delay
         run: |
-          # Calculate a random number of seconds between 0 and 20,400 (5 hours 40 minutes)
           RANDOM_DELAY=$(( RANDOM % 20400 ))
           echo "Random delay in seconds: $RANDOM_DELAY" > random_delay.txt
           echo "delay=$RANDOM_DELAY" >> $GITHUB_ENV
 
       - name: Sleep for random delay
+        if: steps.check_skip_signal.outputs.result == 'false'
         run: |
           DELAY="${{ env.delay }}"
           echo "DELAY value: $DELAY"
           echo "Sleeping for $DELAY seconds. ($((DELAY / 60)) minutes)"
           sleep "$DELAY"
 
-
       - name: Run the Duolingo script
+        if: steps.check_skip_signal.outputs.result == 'false'
         run: node index.js
         env:
           DUOLINGO_JWT: ${{ secrets.DUOLINGO_JWT }}
-          #LESSONS: 1
           LESSONS: ${{ inputs.lessons }}
